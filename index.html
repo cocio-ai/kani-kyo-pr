@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>カニ教 (KANI-KYO) 公式広報サイト</title>
+    <style>
+        /* -------------------------------------
+           ベース・リセット
+        ------------------------------------- */
+        :root {
+            --bg-color: #030303;
+            --text-main: #f4f4f4;
+            --accent-gold: #c5a059;
+            --accent-red: #8b0000;
+            --glass-bg: rgba(20, 20, 20, 0.7);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Yu Mincho', 'Noto Serif JP', serif;
+            overflow-x: hidden;
+            transition: direction 0.3s;
+        }
+
+        /* -------------------------------------
+           ナビゲーション（ヘッダー）
+        ------------------------------------- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 40px;
+            background: var(--glass-bg);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(197, 160, 89, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--accent-gold);
+            letter-spacing: 2px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-main);
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: var(--accent-gold);
+        }
+
+        .lang-selector select {
+            background: transparent;
+            color: var(--accent-gold);
+            border: 1px solid var(--accent-gold);
+            padding: 5px 10px;
+            font-family: inherit;
+            cursor: pointer;
+        }
+
+        .lang-selector select option {
+            background: var(--bg-color);
+            color: var(--accent-gold);
+        }
+
+        /* -------------------------------------
+           ヒーローセクション（メインビジュアル）
+        ------------------------------------- */
+        #hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            /* 画像を image_2.png に変更 */
+            background: linear-gradient(rgba(0,0,0,0.2), rgba(0,0,0,0.7)), url('image_2.png') center/cover fixed;
+            position: relative;
+        }
+
+        #hero h1 {
+            font-size: 5rem;
+            letter-spacing: 15px;
+            color: var(--accent-gold);
+            text-shadow: 0 0 30px rgba(197, 160, 89, 0.9);
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1.5s forwards 0.5s;
+        }
+
+        #hero h2 {
+            font-size: 2rem;
+            letter-spacing: 8px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeUp 1.5s forwards 1s;
+        }
+
+        .scroll-down {
+            position: absolute;
+            bottom: 40px;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            animation: bounce 2s infinite;
+        }
+
+        /* -------------------------------------
+           セクション共通
+        ------------------------------------- */
+        section {
+            padding: 100px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            color: var(--accent-gold);
+            margin-bottom: 60px;
+            letter-spacing: 5px;
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: opacity 1s, transform 1s;
+        }
+
+        .fade-in.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* -------------------------------------
+           教義・理念
+        ------------------------------------- */
+        #philosophy {
+            text-align: center;
+        }
+
+        .philosophy-text {
+            font-size: 2.5rem;
+            line-height: 1.8;
+            border-left: 3px solid var(--accent-gold);
+            border-right: 3px solid var(--accent-gold);
+            padding: 0 40px;
+            display: inline-block;
+            margin-bottom: 40px;
+        }
+        
+        .philosophy-sub {
+            font-size: 1.1rem;
+            line-height: 2;
+            color: #ddd;
+        }
+
+        /* -------------------------------------
+           宗教活動
+        ------------------------------------- */
+        .activities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 40px;
+        }
+
+        .activity-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 40px 30px;
+            text-align: center;
+            transition: transform 0.3s, border-color 0.3s;
+        }
+
+        .activity-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-gold);
+        }
+
+        .activity-card h3 {
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .activity-card p {
+            line-height: 1.8;
+            color: #ccc;
+        }
+
+        /* -------------------------------------
+           信者募集（入信）
+        ------------------------------------- */
+        #join {
+            text-align: center;
+            background: linear-gradient(to top, rgba(139, 0, 0, 0.1), transparent);
+            padding: 120px 20px;
+        }
+
+        .status {
+            font-size: 2rem;
+            margin-bottom: 50px;
+            display: inline-block;
+            padding: 20px 50px;
+            border: 1px solid var(--accent-gold);
+            border-radius: 100px;
+            box-shadow: 0 0 20px rgba(197, 160, 89, 0.2);
+            letter-spacing: 2px;
+        }
+
+        .join-btn {
+            display: inline-block;
+            padding: 20px 60px;
+            font-size: 1.5rem;
+            background-color: var(--accent-red);
+            color: #fff;
+            text-decoration: none;
+            letter-spacing: 5px;
+            border-radius: 5px;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .join-btn:hover {
+            background-color: #a00000;
+            box-shadow: 0 0 30px rgba(139, 0, 0, 0.8);
+        }
+
+        /* -------------------------------------
+           決済モーダル画面
+        ------------------------------------- */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            backdrop-filter: blur(15px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .payment-box {
+            background: #0a0a0a;
+            border: 1px solid var(--accent-gold);
+            padding: 50px;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 10px;
+            box-shadow: 0 0 50px rgba(197, 160, 89, 0.15);
+            position: relative;
+            transform: translateY(20px);
+            transition: transform 0.5s ease;
+        }
+
+        .modal-overlay.active .payment-box {
+            transform: translateY(0);
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 2rem;
+            color: var(--text-main);
+            cursor: pointer;
+            transition: color 0.3s;
+            z-index: 10;
+        }
+
+        .close-btn:hover {
+            color: var(--accent-red);
+        }
+
+        .payment-box h2 {
+            color: var(--accent-gold);
+            text-align: center;
+            font-size: 1.8rem;
+            margin-bottom: 10px;
+            letter-spacing: 3px;
+        }
+
+        .price {
+            text-align: center;
+            font-size: 2.2rem;
+            color: #fff;
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #aaa;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 15px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(197, 160, 89, 0.3);
+            color: #fff;
+            font-size: 1rem;
+            border-radius: 5px;
+            font-family: 'Courier New', Courier, monospace;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            border-color: var(--accent-gold);
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+        }
+        .row .form-group {
+            flex: 1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 20px;
+            background-color: var(--accent-red);
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            cursor: pointer;
+            transition: background-color 0.3s, box-shadow 0.3s;
+            font-family: inherit;
+            margin-top: 20px;
+        }
+
+        .submit-btn:hover {
+            background-color: #a00000;
+            box-shadow: 0 0 20px rgba(139, 0, 0, 0.6);
+        }
+        
+        /* 決済完了画面用 */
+        #successScreen {
+            display: none;
+            text-align: center;
+            padding: 20px 0;
+        }
+        
+        #successScreen h2 {
+            color: #ff4d4d;
+            font-size: 2rem;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px rgba(255, 77, 77, 0.4);
+        }
+        
+        #successScreen p {
+            font-size: 1.3rem;
+            line-height: 2;
+            color: #fff;
+        }
+
+        /* -------------------------------------
+           フッター
+        ------------------------------------- */
+        footer {
+            text-align: center;
+            padding: 30px;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            color: #888;
+        }
+
+        /* -------------------------------------
+           アニメーション
+        ------------------------------------- */
+        @keyframes fadeUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(10px); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo" data-i18n="logo">カニ教</div>
+        <nav>
+            <ul>
+                <li><a href="#hero" data-i18n="nav_home">ホーム</a></li>
+                <li><a href="#philosophy" data-i18n="nav_philosophy">理念</a></li>
+                <li><a href="#activities" data-i18n="nav_activities">宗教活動</a></li>
+                <li><a href="#join" data-i18n="nav_join">入信案内</a></li>
+            </ul>
+        </nav>
+        <div class="lang-selector">
+            <select id="languageSelect" onchange="changeLanguage()">
+                <option value="ja">日本語</option>
+                <option value="en">English</option>
+                <option value="ar">العربية (Arabic)</option>
+                <option value="zh">中文 (Chinese)</option>
+                <option value="ko">한국어 (Korean)</option>
+            </select>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <h1 data-i18n="title">カニ教</h1>
+            <h2 data-i18n="leader">主宰：センズリこきオ</h2>
+            <div class="scroll-down" data-i18n="scroll">SCROLL DOWN ↓</div>
+        </section>
+
+        <section id="philosophy" class="fade-in">
+            <h2 class="section-title" data-i18n="sec_philosophy">理念</h2>
+            <div class="philosophy-text" data-i18n="philosophy_desc">
+                内なるものを解き放つ瞬間が<br>最高の幸せ
+            </div>
+            <p class="philosophy-sub" data-i18n="philosophy_sub">我々は、抑圧された魂を解放し、真の自由と悦びを追求します。<br>日々の抑圧から逃れ、大いなる自然の中で精気を解き放つ。<br>いや、溜まりに溜まった精液を解き放つことこそが、究極の性なる境地なのです。</p>
+        </section>
+
+        <section id="activities" class="fade-in">
+            <h2 class="section-title" data-i18n="sec_activities">宗教活動</h2>
+            <div class="activities-grid">
+                <div class="activity-card">
+                    <h3 data-i18n="act1_title">性なる滝行</h3>
+                    <p data-i18n="act1_desc">大自然のエネルギーを直接受け止め、全身の精気を解き放つ神聖な儀式。いや、時には激しい水圧に身を任せ、精液を解き放つ性なる儀式。主宰自らが手本を示します。</p>
+                </div>
+                <div class="activity-card">
+                    <h3 data-i18n="act2_title">性なる解き放ちの集い</h3>
+                    <p data-i18n="act2_desc">月に一度、信者が集い、社会のしがらみから解放され「内なるもの」と「精気」を分かち合う対話の儀式。聖なる空間で、心の奥底に秘めたるものを開放します。</p>
+                </div>
+                <div class="activity-card">
+                    <h3 data-i18n="act3_title">甲殻歩行瞑想</h3>
+                    <p data-i18n="act3_desc">カニのように横歩きをすることで、直線的な常識から逸脱し、精液を解き放つための新たな視点を手に入れる独自の修行法。</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="join" class="fade-in">
+            <h2 class="section-title" data-i18n="sec_join">信者募集</h2>
+            <div class="status">
+                <span data-i18n="followers">現在信者数</span>：072名
+            </div>
+            <br>
+            <button class="join-btn" onclick="openModal()" data-i18n="join_btn">入信の儀を申し込む</button>
+        </section>
+    </main>
+
+    <!-- 決済モーダル（隠し要素） -->
+    <div id="paymentModal" class="modal-overlay">
+        <div class="payment-box">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            
+            <!-- 決済フォーム画面 -->
+            <div id="paymentFormSection">
+                <h2 data-i18n="modal_title">入信の儀 決済手続き</h2>
+                <div class="price" data-i18n="modal_price">月額 100,000 ペリカ</div>
+                
+                <form id="paymentForm" onsubmit="processPayment(event)">
+                    <div class="form-group">
+                        <label data-i18n="form_card">カード番号 (Card Number)</label>
+                        <input type="text" placeholder="0000 0000 0000 0000" required maxlength="19">
+                    </div>
+                    <div class="form-group">
+                        <label data-i18n="form_name">名義人 (Cardholder Name)</label>
+                        <input type="text" placeholder="TARO KANI" required>
+                    </div>
+                    <div class="row">
+                        <div class="form-group">
+                            <label data-i18n="form_exp">有効期限 (MM/YY)</label>
+                            <input type="text" placeholder="MM/YY" required maxlength="5">
+                        </div>
+                        <div class="form-group">
+                            <label data-i18n="form_cvc">セキュリティコード (CVC)</label>
+                            <input type="password" placeholder="123" required maxlength="4">
+                        </div>
+                    </div>
+                    <button type="submit" class="submit-btn" data-i18n="form_submit">決済して解き放つ</button>
+                </form>
+            </div>
+            
+            <!-- 決済完了画面 -->
+            <div id="successScreen">
+                <h2 data-i18n="success_title">入金ありがとうございました</h2>
+                <p data-i18n="success_desc">カニ教はあなたを迎い入れました。<br>さあ、共に精気を解き放ちましょう。</p>
+                <button class="submit-btn" onclick="closeModal()" style="margin-top: 40px;" data-i18n="success_close">性なる世界へ戻る</button>
+            </div>
+            
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2026 KANI-KYO. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // --- 多言語データ辞書 ---
+        const i18nData = {
+            ja: {
+                logo: "カニ教", nav_home: "ホーム", nav_philosophy: "理念", nav_activities: "宗教活動", nav_join: "入信案内",
+                title: "カニ教", leader: "主宰：センズリこきオ", scroll: "SCROLL DOWN ↓",
+                sec_philosophy: "理念", philosophy_desc: "内なるものを解き放つ瞬間が<br>最高の幸せ", 
+                philosophy_sub: "我々は、抑圧された魂を解放し、真の自由と悦びを追求します。<br>日々の抑圧から逃れ、大いなる自然の中で精気を解き放つ。<br>いや、溜まりに溜まった精液を解き放つことこそが、究極の性なる境地なのです。",
+                sec_activities: "宗教活動",
+                act1_title: "性なる滝行", act1_desc: "大自然のエネルギーを直接受け止め、全身の精気を解き放つ神聖な儀式。いや、時には激しい水圧に身を任せ、精液を解き放つ性なる儀式。主宰自らが手本を示します。",
+                act2_title: "性なる解き放ちの集い", act2_desc: "月に一度、信者が集い、社会のしがらみから解放され「内なるもの」と「精気」を分かち合う対話の儀式。聖なる空間で、心の奥底に秘めたるものを開放します。",
+                act3_title: "甲殻歩行瞑想", act3_desc: "カニのように横歩きをすることで、直線的な常識から逸脱し、精液を解き放つための新たな視点を手に入れる独自の修行法。",
+                sec_join: "信者募集", followers: "現在信者数", join_btn: "入信の儀を申し込む",
+                modal_title: "入信の儀 決済手続き", modal_price: "月額 100,000 ペリカ", form_card: "カード番号 (Card Number)", form_name: "名義人 (Cardholder Name)", form_exp: "有効期限 (MM/YY)", form_cvc: "セキュリティコード (CVC)", form_submit: "決済して解き放つ",
+                success_title: "入金ありがとうございました", success_desc: "カニ教はあなたを迎い入れました。<br>さあ、共に精気を解き放ちましょう。", success_close: "性なる世界へ戻る"
+            },
+            en: {
+                logo: "KANI-KYO", nav_home: "Home", nav_philosophy: "Philosophy", nav_activities: "Activities", nav_join: "Join Us",
+                title: "KANI-KYO", leader: "Leader: Senzuri-kokio", scroll: "SCROLL DOWN ↓",
+                sec_philosophy: "Philosophy", philosophy_desc: "The moment you unleash what is within<br>is the ultimate happiness.", 
+                philosophy_sub: "We seek to liberate the oppressed soul. Escape daily repression and unleash your vitality in nature. Or rather, unleashing that pent-up semen is the ultimate sexual enlightenment.",
+                sec_activities: "Religious Activities",
+                act1_title: "Sexual Waterfall Asceticism", act1_desc: "A sacred ritual to absorb nature's energy. Sometimes, surrendering to the water pressure to unleash semen in a highly sexual ritual. The leader demonstrates this himself.",
+                act2_title: "Gathering of Sexual Unleashing", act2_desc: "A monthly gathering where followers meditate and share their 'inner selves' and 'vitality', free from societal constraints in a sacred space.",
+                act3_title: "Crustacean Walking Meditation", act3_desc: "A unique ascetic practice of walking sideways like a crab to gain new perspectives for unleashing semen.",
+                sec_join: "Recruitment", followers: "Current Followers", join_btn: "Apply for the Rite of Initiation",
+                modal_title: "Rite of Initiation Payment", modal_price: "100,000 Pelica / Month", form_card: "Card Number", form_name: "Cardholder Name", form_exp: "Expiry Date (MM/YY)", form_cvc: "Security Code (CVC)", form_submit: "Pay and Unleash",
+                success_title: "Thank you for your payment", success_desc: "Kani-kyo has welcomed you.<br>Now, let us unleash our vitality together.", success_close: "Return to the Sexual World"
+            },
+            ar: {
+                logo: "كاني-كيو", nav_home: "الرئيسية", nav_philosophy: "فلسفتنا", nav_activities: "الأنشطة", nav_join: "انضم إلينا",
+                title: "كاني-كيو", leader: "الزعيم: سينزوري كوكيو", scroll: "قم بالتمرير للأسفل ↓",
+                sec_philosophy: "الفلسفة", philosophy_desc: "اللحظة التي تطلق فيها ما بداخلك<br>هي أقصى درجات السعادة.", 
+                philosophy_sub: "نسعى لتحرير الروح المضطهدة. اهرب من القمع اليومي وأطلق العنان لحيويتك في الطبيعة. أو بالأحرى، إطلاق ذلك السائل المنوي المكبوت هو التنوير الجنسي المطلق.",
+                sec_activities: "الأنشطة الدينية",
+                act1_title: "زهد الشلال الجنسي", act1_desc: "طقس مقدس لاستيعاب طاقة الطبيعة. في بعض الأحيان، الاستسلام لضغط الماء لإطلاق السائل المنوي في طقس جنسي للغاية. الزعيم يوضح ذلك بنفسه.",
+                act2_title: "تجمع الإطلاق الجنسي", act2_desc: "تجمع شهري حيث يشارك الأتباع 'ذواتهم الداخلية' و'طاقتهم'، متحررين من القيود.",
+                act3_title: "تأمل مشي القشريات", act3_desc: "ممارسة لتمشي جانبًا مثل السلطعون للحصول على وجهات نظر جديدة لإطلاق السائل المنوي.",
+                sec_join: "تجنيد الأتباع", followers: "الأتباع الحاليون", join_btn: "التقدم لطقوس البدء",
+                modal_title: "دفع رسوم البدء", modal_price: "100,000 بيليكا / شهر", form_card: "رقم البطاقة", form_name: "اسم حامل البطاقة", form_exp: "تاريخ الانتهاء (MM/YY)", form_cvc: "رمز الأمان (CVC)", form_submit: "ادفع وأطلق العنان",
+                success_title: "شكرا لدفعتك", success_desc: "كاني-كيو ترحب بك.<br>الآن، دعنا نطلق العنان لطاقتنا معًا.", success_close: "العودة إلى العالم الجنسي"
+            },
+            zh: {
+                logo: "螃蟹教", nav_home: "首页", nav_philosophy: "教义", nav_activities: "宗教活动", nav_join: "入教指南",
+                title: "螃蟹教", leader: "教主：Senzuri-kokio", scroll: "向下滚动 ↓",
+                sec_philosophy: "教义", philosophy_desc: "释放内在的瞬间<br>是最大的幸福", 
+                philosophy_sub: "我们寻求解放被压抑的灵魂。逃离日常的压抑，在大自然中释放精气。不，释放积压的精液才是终极的性之境界。",
+                sec_activities: "宗教活动",
+                act1_title: "性之瀑布修行", act1_desc: "直接接收大自然能量的仪式。有时任凭强烈的水压释放精液，这是一种性之仪式。教主亲自示范。",
+                act2_title: "性之释放集会", act2_desc: "信徒每月聚集一次，摆脱社会束缚，在神圣空间中分享“内在”与“精气”的仪式。",
+                act3_title: "甲壳步行冥想", act3_desc: "像螃蟹一样横向行走，摆脱常识，为释放精液获得新视角的独特修行法。",
+                sec_join: "信徒招募", followers: "当前信徒数", join_btn: "申请入教仪式",
+                modal_title: "入教仪式 支付", modal_price: "每月 100,000 贝里卡", form_card: "信用卡号", form_name: "持卡人姓名", form_exp: "有效期 (MM/YY)", form_cvc: "安全码 (CVC)", form_submit: "支付并释放",
+                success_title: "感谢您的付款", success_desc: "螃蟹教欢迎您的加入。<br>来吧，让我们一起释放精气。", success_close: "返回性之世界"
+            },
+            ko: {
+                logo: "게교", nav_home: "홈", nav_philosophy: "이념", nav_activities: "종교 활동", nav_join: "입교 안내",
+                title: "게교", leader: "교주: 센즈리 코키오", scroll: "아래로 스크롤 ↓",
+                sec_philosophy: "이념", philosophy_desc: "내면을 해방하는 순간이<br>최고의 행복", 
+                philosophy_sub: "우리는 억압된 영혼을 해방합니다. 일상의 억압에서 벗어나 대자연 속에서 정기를 해방하십시오. 아니, 쌓이고 쌓인 정액을 해방하는 것이야말로 궁극의 성(性)스러운 경지입니다.",
+                sec_activities: "종교 활동",
+                act1_title: "성(性)스러운 폭포 수행", act1_desc: "대자연의 에너지를 받아 정기를 해방하는 의식. 때로는 거센 수압에 몸을 맡기고 정액을 해방하는 성스러운 의식. 교주가 직접 모범을 보입니다.",
+                act2_title: "성(性)스러운 해방의 모임", act2_desc: "한 달에 한 번 신도들이 모여 '내면'과 '정기'를 공유하는 의식.",
+                act3_title: "갑각 보행 명상", act3_desc: "게처럼 옆으로 걸으며 선형적인 상식에서 벗어나, 정액을 해방하기 위한 새로운 시각을 얻는 독자적인 수행법.",
+                sec_join: "신도 모집", followers: "현재 신도 수", join_btn: "입교 의식 신청하기",
+                modal_title: "입교 의식 결제", modal_price: "월 100,000 페리카", form_card: "카드 번호", form_name: "카드 소유자 이름", form_exp: "유효 기간 (MM/YY)", form_cvc: "보안 코드 (CVC)", form_submit: "결제하고 해방하기",
+                success_title: "입금해 주셔서 감사합니다", success_desc: "게교가 당신을 맞이했습니다.<br>자, 함께 정기를 해방합시다.", success_close: "성(性)스러운 세계로 돌아가기"
+            }
+        };
+
+        // 言語切り替え処理
+        function changeLanguage() {
+            const lang = document.getElementById('languageSelect').value;
+            const data = i18nData[lang] || i18nData['ja'];
+            const elements = document.querySelectorAll('[data-i18n]');
+            
+            elements.forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (data[key]) {
+                    el.innerHTML = data[key];
+                }
+            });
+
+            // アラビア語の右から左へのテキスト方向対応
+            if(lang === 'ar') {
+                document.body.style.direction = "rtl";
+            } else {
+                document.body.style.direction = "ltr";
+            }
+        }
+
+        // スクロールアニメーション
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target);
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(section => {
+            observer.observe(section);
+        });
+
+        // モーダル処理
+        const modal = document.getElementById('paymentModal');
+        const formSection = document.getElementById('paymentFormSection');
+        const successSection = document.getElementById('successScreen');
+        const form = document.getElementById('paymentForm');
+
+        function openModal() {
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+            // 表示リセット
+            formSection.style.display = 'block';
+            successSection.style.display = 'none';
+            form.reset();
+        }
+
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function processPayment(e) {
+            e.preventDefault(); // フォーム送信を防ぐ
+            
+            // フォームを非表示にし、完了画面を表示する
+            formSection.style.display = 'none';
+            successSection.style.display = 'block';
+        }
+    </script>
+</body>
+</html>
